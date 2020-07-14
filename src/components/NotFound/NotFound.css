@@ -1,0 +1,15 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+.error-message-container {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 2em;
+    margin-top: 70px;
+    font-family: "Montserrat", sans-serif;
+    height: 80vh;
+}
+.not-found{ 
+    margin-top: 10px;
+}
