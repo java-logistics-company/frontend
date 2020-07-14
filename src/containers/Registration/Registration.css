@@ -1,0 +1,29 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat&display=swap");
+
+.register {
+    display: flex;
+    flex-direction: column; 
+}
+.register input, button, .register-title {
+    font-family: 'Montserrat', sans-serif !important; 
+}
+.button-wraper button {
+    background-color: #CEDB56;
+    color: #222222;
+    font-weight: 900;
+    font-size: 1rem;
+   
+    transition: background-color 0.5s, color 0.5s;
+}
+.register-title {
+    margin-top: 100px !important;
+}
+.button-wraper button:hover {
+    background-color: rgb(193, 206, 82);
+}
+.button-wraper { 
+    width: 110%;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row-reverse;
+}

@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Route, Switch, Redirect } from "react-router-dom";
-import ChooseRole from './components/Register/ChooseRole';
-import Registration from './components/Register/Registration';
+import ChooseRole from './containers/Registration/ChooseRole';
+import Registration from './containers/Registration/Registration';
 
 function App() {
   return (
