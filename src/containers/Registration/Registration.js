@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
 const Registration = ({
   getUserDetails,
   match,
-  registerDetails,
+  userRole,
   submitForm
 }) => {
   const [formData, setFormData] = useState({
@@ -110,14 +110,14 @@ const Registration = ({
 
   const classes = useStyles();
 
-  useEffect(() => {
-    getUserDetails(match.params.id).then(
-      setFormData({ //TODO remove form data
-        ...formData,
-        userRole: registerDetails.userRole
-      })
-    );
-  }, []);
+  // useEffect(() => {
+  //   getUserDetails(match.params.id).then(
+  //     setFormData({ //TODO remove form data
+  //       ...formData,
+  //       userRole: userRole
+  //     })
+  //   );
+  // }, []);
 
   const onChange = event => {
     const { value, name } = event.target;
@@ -133,9 +133,7 @@ const Registration = ({
       '(\\+)?(359|0)8[789]\\d{1}\\d{3}\\d{3}'
     );
 
-    const emailValidator = RegExp(
-      '.+@.+\.[a-z]+'
-    );
+    const emailValidator = RegExp('.+@.+.[a-z]+');
 
     switch (field) {
       case 'name':
@@ -264,7 +262,7 @@ const employeeFields = () => (//TODO office id/name
 const handleSubmit = e => {
   e.preventDefault();
   const errorsArray = Object.values(errors);
-  const { userRole } = registerDetails;//TODO maybe add user role here
+  const { userRole } = userRole;//TODO not defined
 
   switch (userRole) {
     case rolesConstants.CLIENT:
@@ -288,7 +286,7 @@ const handleSubmit = e => {
           repeatPassword: repeatPassword,
           phone: phone
         };
-        submitForm(formData, registerDetails.userRole);
+        submitForm(formData, userRole);
       }
       break;
     case rolesConstants.EMPLOYEE:
@@ -312,7 +310,7 @@ const handleSubmit = e => {
           phone: phone,
           officeName: officeName //TODO
         };
-        submitForm(formData, registerDetails.userRole);
+        submitForm(formData, userRole);
       }
       break;
     default:
@@ -324,9 +322,10 @@ const [spacing] = React.useState(2);
 
 return (
   <>
-    {registerDetails.formError ? (
+    {/* {registerDetails.formError ? (
       <NotFound />
-    ) : (
+    ) :  */}
+    (
         <main className="main">
           <div className="main-wrapper">
             <Grid container justify="center" className={classes.root}>
@@ -408,9 +407,9 @@ return (
                   </Grid>
                     Role fields here
                     <Grid item className={classes.colWidth}>
-                    {registerDetails.userRole === 'EMPLOYEE' &&
+                    {userRole === 'EMPLOYEE' &&
                       employeeFields()}
-                    {registerDetails.userRole === 'CLIENT' &&
+                    {userRole === 'CLIENT' &&
                       clientFields()}
                   </Grid>
                   <Grid item xs={12}>
@@ -435,12 +434,13 @@ return (
 };
 
 const mapStateToProps = state => ({
-  registerDetails: state.register
+  userRole: state.userRole
+  // registerDetails: state.register
 });
 
 const mapDispatchToProps = dispatch => ({
   getUserDetails: registerId =>
-    dispatch(registerActions.getUserDetails(registerId)),
+    dispatch(registerActions.getUserDetails(registerId)), //TODO remove
   submitForm: formData => dispatch(registerActions.submitForm(formData))
 });
 

@@ -5,16 +5,19 @@ import Typography from "@material-ui/core/Typography";
 
 class ChooseRole extends React.Component {
 
+    state = {
+        userRole: ''
+    };
+
     componentDidUpdate() {
-              this.props.history.push({ pathname: '/register' });
-      }
+        this.props.history.push({ pathname: '/register' });
+    }
 
     handleClick = e => {
         e.preventDefault();
-        // this.props.userLogin(this.state.email, this.state.password);
-        this.setState({ ...this.state, [e.target.name]: e.target.value });//TODO set user role to state
-      };
-    
+        this.setState({ ...this.state, userRole: e.target.value });
+    };
+
     render() {
         return (
             <React.Fragment>
@@ -27,10 +30,10 @@ class ChooseRole extends React.Component {
                 >
                     Choose role
             </Typography>
-                <Button variant="contained" 
-                color="blue" 
-                href="localhost:3001/Register" 
-                onClick={this.handleClick}>
+                <Button variant="contained"
+                    color="blue"
+                    href="localhost:3001/Register"
+                    onClick={this.handleClick}>
                     Employee
                 </Button>
                 <Button variant="contained" color="blue" href="#contained-buttons">
