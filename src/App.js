@@ -13,13 +13,18 @@ function App() {
         </p>
       </header>
       <main className="main">
-          {" "}
-          <Switch>
-            <Route path="/register" component={Registration}/>
-           {/* <Route path="/login" component={Login} /> */}
-            <Route path="/chooseRole" component={ChooseRole} />
-          </Switch>
-        </main>
+        {" "}
+        <Switch>
+          {/* <Route path="/register" component={Registration} /> */}
+          {/* <Route path="/login" component={Login} /> */}
+          <Route path="/chooseRole"  >
+            <>
+               <Route exact path="/chooseRole" component={ChooseRole} />
+              <Route  path="/chooseRole/:role/register" component={Registration} />
+              </>
+          </Route>
+        </Switch>
+      </main>
     </div>
   );
 }

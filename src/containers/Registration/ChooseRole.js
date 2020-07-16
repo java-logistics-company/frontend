@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from 'react-router-dom';
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 
@@ -9,13 +9,10 @@ class ChooseRole extends React.Component {
         userRole: ''
     };
 
-    componentDidUpdate() {
-        this.props.history.push({ pathname: '/register' });
-    }
+
 
     handleClick = e => {
         e.preventDefault();
-        this.setState({ ...this.state, userRole: e.target.value });
     };
 
     render() {
@@ -30,15 +27,20 @@ class ChooseRole extends React.Component {
                 >
                     Choose role
             </Typography>
-                <Button variant="contained"
-                    color="blue"
-                    href="localhost:3001/Register"
-                    onClick={this.handleClick}>
-                    Employee
+                <Link to="/chooseRole/employee/register" >
+                    <Button variant="contained"
+                        color="blue"
+                    >
+                        Employee
                 </Button>
-                <Button variant="contained" color="blue" href="#contained-buttons">
-                    Supplier
+                </Link>
+                <Link to="/chooseRole/client/register">
+                    <Button variant="contained"
+                        color="blue"
+                    >
+                        Client
                 </Button>
+                </Link>
 
             </React.Fragment>
         );

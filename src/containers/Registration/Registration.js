@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 import Error from '../../components/Error/Error';
 import NotFound from '../../components/NotFound/NotFound';
@@ -107,6 +108,9 @@ const Registration = ({
       invalid: 'Invalid format of the office name'
     }
   };
+
+  const { role } = useParams()
+  console.log("Ivelina", role);
 
   const classes = useStyles();
 
@@ -264,7 +268,7 @@ const handleSubmit = e => {
   const errorsArray = Object.values(errors);
   const { userRole } = userRole;//TODO not defined
 
-  switch (userRole) {
+  switch (role.toUpperCase()) {
     case rolesConstants.CLIENT:
       if (
         errorsArray.some(err => !!err) ||
@@ -325,7 +329,6 @@ return (
     {/* {registerDetails.formError ? (
       <NotFound />
     ) :  */}
-    (
         <main className="main">
           <div className="main-wrapper">
             <Grid container justify="center" className={classes.root}>
@@ -407,9 +410,9 @@ return (
                   </Grid>
                     Role fields here
                     <Grid item className={classes.colWidth}>
-                    {userRole === 'EMPLOYEE' &&
+                    {role.toUpperCase() === 'EMPLOYEE' &&
                       employeeFields()}
-                    {userRole === 'CLIENT' &&
+                    {role.toUpperCase() === 'CLIENT' &&
                       clientFields()}
                   </Grid>
                   <Grid item xs={12}>
@@ -428,7 +431,6 @@ return (
             </Grid>
           </div>
         </main>
-      )}
   </>
 );
 };

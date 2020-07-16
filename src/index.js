@@ -14,12 +14,13 @@ const enhancers = compose(
 );
 
 const store = createStore(rootReducer, enhancers);
+
 ReactDOM.render(
   <Provider store={store}>
-  <BrowserRouter>
-    <App />
+    <BrowserRouter>
+      <App />
     </BrowserRouter>
-    </Provider>,
+  </Provider>,
   document.getElementById('root')
 );
 
