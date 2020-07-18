@@ -21,21 +21,21 @@ app.interceptors.request &&
     error => Promise.reject(error)
   );
 
-// app.interceptors.response.use(
-//   response => response.data,
-//   error => {
-//     if (403 === error.response.status) {
-//       localStorage.clear();
-//       loginActions.clearLoginState();
-//       window.location.href = '/login';
-//     }
-//     if (410 === error.response.status) {
-//       localStorage.clear();
-//       loginActions.clearLoginState();
-//       window.location.href = '/login';
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+app.interceptors.response.use(
+  response => response.data,
+  error => {
+    if (403 === error.response.status) {
+      localStorage.clear();
+      // loginActions.clearLoginState();
+      window.location.href = '/';
+    }
+    if (410 === error.response.status) {
+      localStorage.clear();
+      // loginActions.clearLoginState();
+      window.location.href = '/';
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default app;

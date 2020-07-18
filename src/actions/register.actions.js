@@ -45,10 +45,10 @@ const checkCompanyName = companyName => dispatch => {
   );
 };
 
-const submitForm = (formData, userRole) => dispatch => {
+const submitForm = (formData, role) => dispatch => {
   dispatch({ type: registerConstants.SUBMIT_REGISTRATION_FORM });
 
-  return registerService.submitForm(formData, userRole).then(
+  return registerService.submitForm(formData, role).then(
     data => {
       // dispatch(loginActions.userLogin(formData.email, formData.password));
       return dispatch({

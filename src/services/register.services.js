@@ -1,5 +1,5 @@
 import app from '../utils/axiosConfig';
-const baseUrl = process.env.REACT_APP_API_URL;
+const baseUrl = 'http://localhost:8090';
 
 function getUserDetails(registerId) {
   const requestOptions = {
@@ -25,14 +25,14 @@ function checkCompanyName(companyName) {
   return app.request(`${baseUrl}users/company/${companyName}`, requestOptions);
 }
 
-function submitForm(formData, userRole) {
+function submitForm(formData, role) {
   const requestOptions = {
     method: 'POST',
     headers: {},
     data: { ...formData }
   };
-  return userRole === 'EMPLOYEE' ? app.request(`${baseUrl}users/employee`, requestOptions)
-    : app.request(`${baseUrl}users/client`, requestOptions);
+  console.log("base", baseUrl);
+  return app.request(`/users/${role}`);
 }
 
 export const registerService = {

@@ -51,7 +51,6 @@ const useStyles = makeStyles(theme => ({
 const Registration = ({
   getUserDetails,
   match,
-  userRole,
   submitForm
 }) => {
   const [formData, setFormData] = useState({
@@ -61,6 +60,7 @@ const Registration = ({
     password: '',
     repeatPassword: '',
     officeName: '',
+    companyName: '',
     showError: false
   });
 
@@ -71,6 +71,7 @@ const Registration = ({
     password,
     repeatPassword,
     officeName,
+    companyName,
     showError
   } = formData;
 
@@ -81,7 +82,8 @@ const Registration = ({
     phone: '',
     password: '',
     repeatPassword: '',
-    officeName: ''
+    officeName: '',
+    companyName: ''
   });
 
   const errorMessages = {
@@ -106,11 +108,14 @@ const Registration = ({
     officeName: {
       length: 'Your office name is required to finish the registration',
       invalid: 'Invalid format of the office name'
+    },
+    companyName: {
+      length: 'Your company name is required to finish the registration',
+      invalid: 'Invalid format of the company name'
     }
   };
 
   const { role } = useParams()
-  console.log("Ivelina", role);
 
   const classes = useStyles();
 
@@ -137,7 +142,9 @@ const Registration = ({
       '(\\+)?(359|0)8[789]\\d{1}\\d{3}\\d{3}'
     );
 
-    const emailValidator = RegExp('.+@.+.[a-z]+');
+    const emailValidator = RegExp(
+      '[a-z].+@.+.[a-z]+'
+    );
 
     switch (field) {
       case 'name':
@@ -154,7 +161,8 @@ const Registration = ({
         errors.email =
           email.trim().length === 0
             ? errorMessages.email.length
-            : !emailValidator.test(email) && errorMessages.email.invalid;
+            : !emailValidator.test(email)
+            && errorMessages.email.invalid;
         setErrors({
           ...errors,
           email: errors.email
@@ -199,6 +207,16 @@ const Registration = ({
           officeName: errors.officeName
         });
         break;
+      case 'companyName':
+        errors.companyName =
+          companyName.trim().length === 0
+            ? errorMessages.companyName.length
+            : !isNaN(companyName) && errorMessages.companyName.invalid;
+        setErrors({
+          ...errors,
+          companyName: errors.companyName
+        });
+        break;
       default:
         break;
     }
@@ -224,215 +242,219 @@ const Registration = ({
         />
       </Grid>
       <Grid item className={classes.colWidth}>
-      <TextField
-        className={classes.textField}
-        id="company-name-input"
-        required
-        label="Company name"
-        type="text"
-        name="companyName"
-        autoFocus
-        margin="normal"
-        variant="outlined"
-        value={officeName}
-        onChange={onChange}
-        error={errors.officeName.length > 0}
-        helperText={errors.officeName}
-        onBlur={event => validation(event.target.name)}
-      />
-    </Grid>
+        <TextField
+          className={classes.textField}
+          id="company-name-input"
+          required
+          label="Company name"
+          type="text"
+          name="companyName"
+          autoFocus
+          margin="normal"
+          variant="outlined"
+          value={companyName}
+          onChange={onChange}
+          error={errors.companyName.length > 0}
+          helperText={errors.companyName}
+          onBlur={event => validation(event.target.name)}
+        />
+      </Grid>
     </>
   );
 
-const employeeFields = () => (//TODO office id/name
-  <TextField
-    className={classes.textField}
-    id="company-name-input"
-    required
-    label="Office name"
-    type="text"
-    name="officeName"
-    autoFocus
-    margin="normal"
-    variant="outlined"
-    value={officeName}
-    onChange={onChange}
-    error={errors.officeName.length > 0}
-    helperText={errors.officeName}
-    onBlur={event => validation(event.target.name)}
-  />
-);
+  const employeeFields = () => (//TODO office id/name
+    <TextField
+      className={classes.textField}
+      id="company-name-input"
+      required
+      label="Office name"
+      type="text"
+      name="officeName"
+      autoFocus
+      margin="normal"
+      variant="outlined"
+      value={officeName}
+      onChange={onChange}
+      error={errors.officeName.length > 0}
+      helperText={errors.officeName}
+      onBlur={event => validation(event.target.name)}
+    />
+  );
 
-const handleSubmit = e => {
-  e.preventDefault();
-  const errorsArray = Object.values(errors);
-  const { userRole } = userRole;//TODO not defined
+  const handleSubmit = e => {
+    e.preventDefault();
+    const errorsArray = Object.values(errors);
 
-  switch (role.toUpperCase()) {
-    case rolesConstants.CLIENT:
-      if (
-        errorsArray.some(err => !!err) ||
-        name.length === 0 ||
-        email.length === 0 ||
-        password.length < 6 ||
-        phone.length === 0 ||
-        repeatPassword.length === 0
-      ) {
-        setFormData({ showError: !!showError });
-        setTimeout(() => {
-          setFormData({ showError: false });
-        }, 3000);
-      } else {
-        const formData = {
-          name: name,
-          email: email,
-          password: password,
-          repeatPassword: repeatPassword,
-          phone: phone
-        };
-        submitForm(formData, userRole);
-      }
-      break;
-    case rolesConstants.EMPLOYEE:
-      if (
-        errorsArray.some(err => !!err) ||
-        name.length === 0 ||
-        officeName.length === 0 ||
-        password.length === 0 ||
-        repeatPassword.length === 0
-      ) {
-        setFormData({ showError: true });
-        setTimeout(() => {
-          setFormData({ showError: false });
-        }, 3000);
-      } else {
-        const formData = {
-          name: name,
-          email: email,
-          password: password,
-          repeatPassword: repeatPassword,
-          phone: phone,
-          officeName: officeName //TODO
-        };
-        submitForm(formData, userRole);
-      }
-      break;
-    default:
-      throw new Error('Invalid user role');
-  }
-};
+    switch (role.toUpperCase()) {
+      case rolesConstants.CLIENT:
+        if (
+          errorsArray.some(err => !!err) ||
+          name.length === 0 ||
+          email.length === 0 ||
+          password.length < 6 ||
+          repeatPassword.length === 0 ||
+          phone.length === 0 ||
+          companyName.length === 0
 
-const [spacing] = React.useState(2);
+        ) {
+          setFormData({ showError: !!showError });
+          setTimeout(() => {
+            setFormData({ showError: false });
+          }, 3000);
+        } else {
+          const formData = {
+            name: name,
+            email: email,
+            password: password,
+            repeatPassword: repeatPassword,
+            phone: phone,
+            companyName: companyName
+          };
+          console.log("Ivelina", formData, role);
+          submitForm(formData, role);
+        }
+        break;
+      case rolesConstants.EMPLOYEE:
+        if (
+          errorsArray.some(err => !!err) ||
+          name.length === 0 ||
+          officeName.length === 0 ||
+          password.length === 0 ||
+          repeatPassword.length === 0
+        ) {
+          setFormData({ showError: true });
+          setTimeout(() => {
+            setFormData({ showError: false });
+          }, 3000);
+        } else {
+          const formData = {
+            name: name,
+            email: email,
+            password: password,
+            repeatPassword: repeatPassword,
+            officeName: officeName
+          };
+          submitForm(formData, role);
+        }
+        break;
+      default:
+        throw new Error('Invalid user role');
+    }
+  };
 
-return (
-  <>
-    {/* {registerDetails.formError ? (
+  const [spacing] = React.useState(2);
+
+  return (
+    <>
+      {/* {registerDetails.formError ? (
       <NotFound />
     ) :  */}
-        <main className="main">
-          <div className="main-wrapper">
-            <Grid container justify="center" className={classes.root}>
-              <Grid item xs={12}>
-                <Typography
-                  variant="h3"
-                  component="h1"
-                  className={classes.formTitle}
-                >
-                  Registration
+      <main className="main">
+        <div className="main-wrapper">
+          <Grid container justify="center" className={classes.root}>
+            <Grid item xs={12}>
+              <Typography
+                variant="h3"
+                component="h1"
+                className={classes.formTitle}
+              >
+                Registration
                 </Typography>
-              </Grid>
-              <form onSubmit={handleSubmit}>
-                {/* //TODO add disabled choosen role */}
-                <Grid container spacing={spacing} justify="center">
-                  <Grid item className={classes.colWidth}>
-                    <TextField
-                      className={classes.textField}
-                      id="first-name-input"
-                      required
-                      label="Name"
-                      type="text"
-                      name="name"
-                      autoFocus
-                      margin="normal"
-                      variant="outlined"
-                      value={name}
-                      onChange={onChange}
-                      error={errors.name.length > 0}
-                      helperText={errors.name}
-                      onBlur={event => validation(event.target.field)}
-                    />
-                  </Grid>
-                  <Grid item className={classes.colWidth}>
-                    <TextField
-                      className={classes.textField}
-                      id="email-input"
-                      required
-                      label="Email"
-                      type="email"
-                      name="email"
-                      autoComplete="email"
-                      margin="normal"
-                      variant="outlined"
-                      value=""
-                    />
-                  </Grid>
-                  <Grid item className={classes.colWidth}>
-                    <TextField
-                      className={classes.textField}
-                      id="password-input"
-                      required
-                      label="Password"
-                      type="password"
-                      name="password"
-                      margin="normal"
-                      variant="outlined"
-                      onChange={onChange}
-                      error={errors.password.length > 0}
-                      helperText={errors.password}
-                      onBlur={event => validation(event.target.name)}
-                    />
-                  </Grid>
-                  <Grid item className={classes.colWidth}>
-                    <TextField
-                      className={classes.textField}
-                      id="confirm-password-input"
-                      required
-                      label="Repeat password"
-                      type="password"
-                      name="repeatPassword"
-                      margin="normal"
-                      variant="outlined"
-                      onChange={onChange}
-                      error={errors.repeatPassword.length > 0}
-                      helperText={errors.confirmPassword}
-                      onBlur={event => validation(event.target.name)}
-                    />
-                  </Grid>
-                    Role fields here
-                    <Grid item className={classes.colWidth}>
-                    {role.toUpperCase() === 'EMPLOYEE' &&
-                      employeeFields()}
-                    {role.toUpperCase() === 'CLIENT' &&
-                      clientFields()}
-                  </Grid>
-                  <Grid item xs={12}>
-                    {showError && (
-                      <Error message="Please fill out all the input fields" />
-                    )}
-                    <button
-                      type="submit"
-                      className="primary primary--large primary--margin-top center"
-                    >
-                      REGISTER
-                    </button>
-                  </Grid>
-                </Grid>
-              </form>
             </Grid>
-          </div>
-        </main>
-  </>
-);
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={spacing} justify="center">
+                <Grid item className={classes.colWidth}>
+                  <TextField
+                    className={classes.textField}
+                    id="first-name-input"
+                    required
+                    label="Name"
+                    type="text"
+                    name="name"
+                    autoFocus
+                    margin="normal"
+                    variant="outlined"
+                    value={name}
+                    onChange={onChange}
+                    error={errors.name.length > 0}
+                    helperText={errors.name}
+                    onBlur={event => validation(event.target.field)}
+                  />
+                </Grid>
+                <Grid item className={classes.colWidth}>
+                  <TextField
+                    className={classes.textField}
+                    id="email-input"
+                    required
+                    label="Email"
+                    type="email"
+                    name="email"
+                    autoComplete="email"
+                    margin="normal"
+                    variant="outlined"
+                    value={email}
+                    onChange={onChange}
+                    error={errors.name.length > 0}
+                    helperText={errors.name}
+                    onBlur={event => validation(event.target.field)}
+                  />
+                </Grid>
+                <Grid item className={classes.colWidth}>
+                  <TextField
+                    className={classes.textField}
+                    id="password-input"
+                    required
+                    label="Password"
+                    type="password"
+                    name="password"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={onChange}
+                    error={errors.password.length > 0}
+                    helperText={errors.password}
+                    onBlur={event => validation(event.target.name)}
+                  />
+                </Grid>
+                <Grid item className={classes.colWidth}>
+                  <TextField
+                    className={classes.textField}
+                    id="confirm-password-input"
+                    required
+                    label="Repeat password"
+                    type="password"
+                    name="repeatPassword"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={onChange}
+                    error={errors.repeatPassword.length > 0}
+                    helperText={errors.confirmPassword}
+                    onBlur={event => validation(event.target.name)}
+                  />
+                </Grid> 
+                <Grid item className={classes.colWidth}>
+                  {role.toUpperCase() === 'EMPLOYEE' &&
+                    employeeFields()}
+                  {role.toUpperCase() === 'CLIENT' &&
+                    clientFields()}
+                </Grid>
+                <Grid item xs={12}>
+                  {showError && (
+                    <Error message="Please fill out all the input fields" />
+                  )}
+                  <button
+                    type="submit"
+                    className="primary primary--large primary--margin-top center"
+                  >
+                    REGISTER
+                    </button>
+                </Grid>
+              </Grid>
+            </form>
+          </Grid>
+        </div>
+      </main>
+    </>
+  );
 };
 
 const mapStateToProps = state => ({
@@ -442,7 +464,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   getUserDetails: registerId =>
-    dispatch(registerActions.getUserDetails(registerId)), //TODO remove
+    dispatch(registerActions.getUserDetails(registerId)), //TODO get Companies and offices
   submitForm: formData => dispatch(registerActions.submitForm(formData))
 });
 
